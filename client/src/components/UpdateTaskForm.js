@@ -1,17 +1,18 @@
+// UpdateTaskForm.js
 import React from "react";
 import { Form, Input, DatePicker, Select } from "antd";
 import moment from "moment";
 
 const { Option } = Select;
 
-const TaskForm = ({ newTask, setNewTask }) => (
+const UpdateTaskForm = ({ task, setTask }) => (
     <Form>
         <Form.Item label="Title">
             <Input
-                value={newTask.title}
+                value={task.title}
                 onChange={(e) =>
-                    setNewTask({
-                        ...newTask,
+                    setTask({
+                        ...task,
                         title: e.target.value,
                     })
                 }
@@ -19,10 +20,10 @@ const TaskForm = ({ newTask, setNewTask }) => (
         </Form.Item>
         <Form.Item label="Description">
             <Input
-                value={newTask.description}
+                value={task.description}
                 onChange={(e) =>
-                    setNewTask({
-                        ...newTask,
+                    setTask({
+                        ...task,
                         description: e.target.value,
                     })
                 }
@@ -30,20 +31,23 @@ const TaskForm = ({ newTask, setNewTask }) => (
         </Form.Item>
         <Form.Item label="Due Date">
             <DatePicker
-                value={newTask.dueDate ? moment(newTask.dueDate) : null}
+                value={task.dueDate ? moment(task.dueDate) : null}
                 onChange={(date) =>
-                    setNewTask({
-                        ...newTask,
-                        dueDate: date ? date.toDate() : null,
+                    setTask({
+                        ...task,
+                        dueDate: date,
                     })
                 }
             />
         </Form.Item>
         <Form.Item label="Priority">
             <Select
-                value={newTask.priority}
+                value={task.priority}
                 onChange={(value) =>
-                    setNewTask({ ...newTask, priority: value })
+                    setTask({
+                        ...task,
+                        priority: value,
+                    })
                 }
             >
                 <Option value="low">Low</Option>
@@ -54,4 +58,4 @@ const TaskForm = ({ newTask, setNewTask }) => (
     </Form>
 );
 
-export default TaskForm;
+export default UpdateTaskForm;

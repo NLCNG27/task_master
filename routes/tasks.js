@@ -24,7 +24,25 @@ router.get("/", async (req, res) => {
     }
 });
 
-// deleting a task
+
+// Update a task
+router.put("/:id", async (req, res) => { 
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        if (!updatedTask) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+        res.status(200).json(updatedTask);
+        
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
+
+// Deleting a task
 router.delete("/:id", (req, res) => {
     console.log(`Attempting to delete task with id ${req.params.id}`);
     Task.findByIdAndDelete(req.params.id)
@@ -44,5 +62,7 @@ router.delete("/:id", (req, res) => {
             res.status(400).json("Error: ", error);
         });
 });
+
+
 
 module.exports = router;

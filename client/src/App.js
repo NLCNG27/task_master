@@ -1,13 +1,10 @@
 import React from "react";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import TaskList from "./components/TaskList";
-import Task from "./components/TaskForm";
+import Task from "./components/AddTaskForm";
 
 const { Header, Content, Footer } = Layout;
-// const items = new Array(3).fill(null).map((_, index) => ({
-//   key: index + 1,
-//   label: `nav ${index + 1}`,
-// }));
+
 const App = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -18,12 +15,13 @@ const App = () => {
                 style={{
                     display: "flex",
                     alignItems: "center",
-                  
                 }}
             >
                 <div className="demo-logo" />
 
-                <h1 style={{ color: "#FFF", marginRight: "50px" }}>TaskMaster</h1>
+                <h1 style={{ color: "#FFF", marginRight: "50px" }}>
+                    TaskMaster
+                </h1>
                 <Menu
                     theme="dark"
                     mode="horizontal"
@@ -68,7 +66,8 @@ const App = () => {
                     textAlign: "center",
                 }}
             >
-                ©{new Date().getFullYear()} Developed by CNG Software. All rights reserved.
+                ©{new Date().getFullYear()} Developed by CNG Software. All
+                rights reserved.
             </Footer>
         </Layout>
     );

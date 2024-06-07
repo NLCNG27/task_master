@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, DatePicker, Select, Table } from "antd";
-import moment from 'moment';
+import moment from "moment";
 import TaskTable from "./TaskTable";
-import TaskModal from "./TaskModal";
-
+import AddTaskModal from "./AddTaskModal";
+import UpdateTaskModal from "./UpdateTaskModal";
 
 const TaskList = () => {
-
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState({
         title: "",
@@ -15,7 +14,8 @@ const TaskList = () => {
         dueDate: null,
         priority: "",
     });
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
     const myRoute = "http://localhost:5001/api/tasks";
 
@@ -30,9 +30,24 @@ const TaskList = () => {
             .catch((error) => console.log(error));
     };
 
+    const reset = () => {
+        setNewTask({
+            title: "",
+            description: "",
+            dueDate: null,
+            priority: "",
+        });
+        setIsAddModalVisible(false);
+        setIsUpdateModalVisible(false);
+    };
+
     const addTask = () => {
-        console.log('adding')
-        if (!newTask.title || !newTask.description || !newTask.dueDate || !newTask.priority) {
+        if (
+            !newTask.title ||
+            !newTask.description ||
+            !newTask.dueDate ||
+            !newTask.priority
+        ) {
             alert("Please fill in all fields");
             return;
         }
@@ -40,21 +55,39 @@ const TaskList = () => {
         axios
             .post(myRoute, newTask)
             .then(() => {
-                setNewTask({ title: "", description: "", dueDate: null, priority: ""});
                 fetchTasks();
-                setIsModalVisible(false);
+                reset();
             })
             .catch((error) => console.log(error));
     };
 
+    const updateTask = (id, updatedTask) => {
+        console.log(`Updating task with id: ${id}`, updatedTask); // Log the data
+        axios
+            .put(`${myRoute}/${id}`, updatedTask)
+            .then(() => {
+                fetchTasks();
+                reset();
+            })
+            .catch((error) => console.log(error));
+    };
+
+    const handleUpdateClick = (task) => {
+        setNewTask(task);
+        setIsUpdateModalVisible(true);
+    };
+
+    const handleAddClick = () => {
+        reset();
+        setIsAddModalVisible(true);
+    };
+
     const deleteTask = (id) => {
-        console.log("id: ", id);
         axios
             .delete(`${myRoute}/${id}`)
             .then(() => fetchTasks())
             .catch((error) => console.log(error));
     };
-
 
     return (
         <div>
@@ -65,14 +98,31 @@ const TaskList = () => {
                 }}
             >
                 <h1 style={{ marginRight: "30px" }}>All Tasks</h1>
-                <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                <Button
+                    type="primary"
+                    onClick={handleAddClick}
+                >
                     Add
                 </Button>
             </div>
-
-            <TaskModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} newTask={newTask} setNewTask={setNewTask} addTask={addTask} />
-            <TaskTable tasks={tasks} deleteTask={deleteTask} />
-
+            <UpdateTaskModal
+                isUpdateModalVisible={isUpdateModalVisible}
+                setIsUpdateModalVisible={setIsUpdateModalVisible}
+                task={newTask}
+                updateTask={updateTask}
+            />
+            <AddTaskModal
+                isModalVisible={isAddModalVisible}
+                setIsAddModalVisible={setIsAddModalVisible}
+                newTask={newTask}
+                setNewTask={setNewTask}
+                addTask={addTask}
+            />
+            <TaskTable
+                tasks={tasks}
+                updateTask={handleUpdateClick}
+                deleteTask={deleteTask}
+            />
         </div>
     );
 };
