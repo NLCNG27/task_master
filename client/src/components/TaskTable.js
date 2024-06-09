@@ -3,7 +3,16 @@ import { Table, Button } from "antd";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
-const TaskTable = ({ tasks, deleteTask, updateTask }) => {
+const statusCycle = ["Pending", "In Progress", "Completed", "Withdrawn"];
+
+const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
+
+    const getNextStatus = (currentStatus) => {
+        const currentIndex = statusCycle.indexOf(currentStatus);
+        const nextIndex = (currentIndex + 1) % statusCycle.length;
+        return statusCycle[nextIndex];
+    };
+
     const columns = [
         {
             title: "Title",
@@ -27,6 +36,8 @@ const TaskTable = ({ tasks, deleteTask, updateTask }) => {
             dataIndex: "priority",
             key: "priority",
             render: (priority) => {
+                if (!priority) return null;
+
                 let color;
                 switch (priority) {
                     case "low":
@@ -45,6 +56,41 @@ const TaskTable = ({ tasks, deleteTask, updateTask }) => {
                     <span style={{ color }}>
                         {priority.charAt(0).toUpperCase() + priority.slice(1)}
                     </span>
+                );
+            },
+        },
+
+        {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: (status, record) => {
+                let color;
+                switch (status) {
+                    case "Pending":
+                        color = "blue";
+                        break;
+                    case "In-Progress":
+                        color = "orange";
+                        break;
+                    case "Completed":
+                        color = "green";
+                        break;
+                    case "Withdrawn":
+                        color = "red";
+                        break;
+                    default:
+                        color = "black";
+                }
+                return (
+                    <Button
+                        style={{ backgroundColor: color, color: "white" }}
+                        onClick={() =>
+                            updateStatus(record._id, getNextStatus(status))
+                        }
+                    >
+                        {status}
+                    </Button>
                 );
             },
         },

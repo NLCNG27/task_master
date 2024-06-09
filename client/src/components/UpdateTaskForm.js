@@ -55,6 +55,22 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 <Option value="high">High</Option>
             </Select>
         </Form.Item>
+        <Form.Item label="Status">
+            <Select
+                value={task.status}
+                onChange={(value) =>
+                    setTask({
+                        ...task,
+                        status: value,
+                    })
+                }
+            >
+                <Option value="Pending">Pending</Option>
+                <Option value="In-Progress">In-Progress</Option>
+                <Option value="Completed">Completed</Option>
+                <Option value="Withdrawn">Withdrawn</Option>
+            </Select>
+        </Form.Item>
     </Form>
 );
 

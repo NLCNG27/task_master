@@ -5,7 +5,6 @@ import moment from "moment";
 const { Option } = Select;
 
 const AddTaskForm = ({ newTask, setNewTask }) => {
-
     return (
         <Form>
             <Form.Item label="Title">
@@ -51,6 +50,19 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     <Option value="low">Low</Option>
                     <Option value="medium">Medium</Option>
                     <Option value="high">High</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item label="Status">
+                <Select
+                    value={newTask.status}
+                    onChange={(value) =>
+                        setNewTask({ ...newTask, status: value })
+                    }
+                >
+                    <Option value="Pending">Pending</Option>
+                    <Option value="In-Progress">In-Progress</Option>
+                    <Option value="Completed">Completed</Option>
+                    <Option value="Withdrawn">Withdrawn</Option>
                 </Select>
             </Form.Item>
         </Form>

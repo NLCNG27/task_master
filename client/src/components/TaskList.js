@@ -72,6 +72,13 @@ const TaskList = () => {
             .catch((error) => console.log(error));
     };
 
+    const updateStatus = (id, status) => {
+        axios
+            .put(`${myRoute}/${id}`, { status })
+            .then(() => fetchTasks())
+            .catch((error) => console.log(error));
+    };
+
     const handleUpdateClick = (task) => {
         setNewTask(task);
         setIsUpdateModalVisible(true);
@@ -122,6 +129,7 @@ const TaskList = () => {
                 tasks={tasks}
                 updateTask={handleUpdateClick}
                 deleteTask={deleteTask}
+                updateStatus={updateStatus}
             />
         </div>
     );
