@@ -1,12 +1,11 @@
 import React from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const statusCycle = ["Pending", "In Progress", "Completed", "Withdrawn"];
 
 const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
-
     const getNextStatus = (currentStatus) => {
         const currentIndex = statusCycle.indexOf(currentStatus);
         const nextIndex = (currentIndex + 1) % statusCycle.length;
@@ -105,12 +104,18 @@ const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
                         icon={<EditOutlined />}
                         style={{ marginRight: "10px" }}
                     />
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={() => deleteTask(record._id)}
-                        icon={<DeleteOutlined />}
-                    />
+                    <Popconfirm
+                        title="Are you sure you want to delete this task?"
+                        onConfirm={() => deleteTask(record._id)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button
+                            type="primary"
+                            danger
+                            icon={<DeleteOutlined />}
+                        />
+                    </Popconfirm>
                 </>
             ),
         },
