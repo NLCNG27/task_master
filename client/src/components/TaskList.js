@@ -11,8 +11,9 @@ const TaskList = () => {
     const [newTask, setNewTask] = useState({
         title: "",
         description: "",
-        dueDate: null,
+        dueDate: moment().toDate(),
         priority: "",
+        status: "Pending",
     });
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
@@ -34,7 +35,7 @@ const TaskList = () => {
         setNewTask({
             title: "",
             description: "",
-            dueDate: null,
+            dueDate: moment().toDate(),
             priority: "",
             status: "Pending",
         });
