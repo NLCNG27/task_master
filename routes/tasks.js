@@ -24,7 +24,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-
 // Update a task
 router.put("/:id", async (req, res) => { 
     try {
@@ -39,7 +38,6 @@ router.put("/:id", async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-
 
 
 // Deleting a task

@@ -66,7 +66,7 @@ const App = () => {
                     textAlign: "center",
                 }}
             >
-                ©{new Date().getFullYear()} Developed by CNG Software. All
+                ©{new Date().getFullYear()} Developed by <a href="https://www.cngsoftware.com">CNG Software</a>. All
                 rights reserved.
             </Footer>
         </Layout>

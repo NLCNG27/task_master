@@ -8,7 +8,6 @@ const TaskSchema = new mongoose.Schema({
     status: { type: String, enum: ['Pending', 'In Progress', 'Completed', 'Withdrawn'], default: 'Pending' },
     completed: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
-
 });
 
 module.exports = mongoose.model('Task', TaskSchema);

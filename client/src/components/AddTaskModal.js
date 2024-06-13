@@ -9,15 +9,36 @@ const AddTaskModal = ({
     addTask,
     newTask,
     setNewTask,
-}) => (
-    <Modal
-        title="Add task"
-        visible={isModalVisible}
-        onOk={addTask}
-        onCancel={() => setIsAddModalVisible(false)}
-    >
-        <AddTaskForm newTask={newTask} setNewTask={setNewTask} />
-    </Modal>
-);
+}) => {
+    const handleOk = () => {
+        if (
+            !newTask.title ||
+            !newTask.description ||
+            !newTask.dueDate ||
+            !newTask.priority ||
+            !newTask.status
+        ) {
+            alert("Please fill in all fields");
+            return;
+        }
+        addTask();
+    };
+
+    const handleCancel = () => {
+        setIsAddModalVisible(false);
+    }
+
+    return (
+        <Modal
+            title="Add task"
+            visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            okText="Add"
+        >
+            <AddTaskForm newTask={newTask} setNewTask={setNewTask} />
+        </Modal>
+    );
+};
 
 export default AddTaskModal;

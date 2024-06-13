@@ -94,7 +94,6 @@ const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
                 );
             },
         },
-
         {
             title: "Actions",
             key: "actions",

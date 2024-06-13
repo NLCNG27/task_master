@@ -7,7 +7,7 @@ const { Option } = Select;
 
 const UpdateTaskForm = ({ task, setTask }) => (
     <Form>
-        <Form.Item label="Title">
+        <Form.Item label="Title" required>
             <Input
                 value={task.title}
                 onChange={(e) =>
@@ -18,7 +18,7 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 }
             />
         </Form.Item>
-        <Form.Item label="Description">
+        <Form.Item label="Description" required>
             <Input
                 value={task.description}
                 onChange={(e) =>
@@ -29,7 +29,7 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 }
             />
         </Form.Item>
-        <Form.Item label="Due Date">
+        <Form.Item label="Due Date" required>
             <DatePicker
                 value={task.dueDate ? moment(task.dueDate) : null}
                 onChange={(date) =>
@@ -40,7 +40,7 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 }
             />
         </Form.Item>
-        <Form.Item label="Priority">
+        <Form.Item label="Priority" required>
             <Select
                 value={task.priority}
                 onChange={(value) =>
@@ -55,7 +55,7 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 <Option value="high">High</Option>
             </Select>
         </Form.Item>
-        <Form.Item label="Status">
+        <Form.Item label="Status" required>
             <Select
                 value={task.status}
                 onChange={(value) =>

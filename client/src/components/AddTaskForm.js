@@ -6,8 +6,8 @@ const { Option } = Select;
 
 const AddTaskForm = ({ newTask, setNewTask }) => {
     return (
-        <Form>
-            <Form.Item label="Title">
+        <Form initialValues={{ status: newTask.status || "Pending" }}>
+            <Form.Item label="Title" required>
                 <Input
                     value={newTask.title}
                     onChange={(e) =>
@@ -18,7 +18,7 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     }
                 />
             </Form.Item>
-            <Form.Item label="Description">
+            <Form.Item label="Description" required>
                 <Input
                     value={newTask.description}
                     onChange={(e) =>
@@ -29,7 +29,7 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     }
                 />
             </Form.Item>
-            <Form.Item label="Due Date">
+            <Form.Item label="Due Date" required>
                 <DatePicker
                     value={newTask.dueDate ? moment(newTask.dueDate) : null}
                     onChange={(date) =>
@@ -40,7 +40,7 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     }
                 />
             </Form.Item>
-            <Form.Item label="Priority">
+            <Form.Item label="Priority" required>
                 <Select
                     value={newTask.priority}
                     onChange={(value) =>
@@ -52,7 +52,7 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     <Option value="high">High</Option>
                 </Select>
             </Form.Item>
-            <Form.Item label="Status">
+            <Form.Item label="Status" required>
                 <Select
                     value={newTask.status}
                     onChange={(value) =>
@@ -60,7 +60,7 @@ const AddTaskForm = ({ newTask, setNewTask }) => {
                     }
                 >
                     <Option value="Pending">Pending</Option>
-                    <Option value="In-Progress">In-Progress</Option>
+                    <Option value="In Progress">In Progress</Option>
                     <Option value="Completed">Completed</Option>
                     <Option value="Withdrawn">Withdrawn</Option>
                 </Select>

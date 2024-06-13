@@ -36,6 +36,7 @@ const TaskList = () => {
             description: "",
             dueDate: null,
             priority: "",
+            status: "Pending",
         });
         setIsAddModalVisible(false);
         setIsUpdateModalVisible(false);
@@ -46,7 +47,8 @@ const TaskList = () => {
             !newTask.title ||
             !newTask.description ||
             !newTask.dueDate ||
-            !newTask.priority
+            !newTask.priority || 
+            !newTask.status
         ) {
             alert("Please fill in all fields");
             return;
