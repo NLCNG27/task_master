@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input, DatePicker, Select, Table } from "antd";
+import { Button } from "antd";
 import moment from "moment";
 import TaskTable from "./TaskTable";
 import AddTaskModal from "./AddTaskModal";
 import UpdateTaskModal from "./UpdateTaskModal";
+import { AuthContext } from "../context/AuthContext";
 
 const TaskList = () => {
+    const { user } = useContext(AuthContext);
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState({
         title: "",
@@ -21,14 +23,22 @@ const TaskList = () => {
     const myRoute = "http://localhost:5001/api/tasks";
 
     useEffect(() => {
-        fetchTasks();
-    }, []);
+        console.log("User context:", user);
+        if (user) {
+            console.log("Fetching tasks for user:", user);
+            fetchTasks();
+        }
+    }, [user]);
 
     const fetchTasks = () => {
+        const token = localStorage.getItem("token");
+        console.log("Fetching tasks with token:", token);
         axios
-            .get(myRoute)
+            .get(myRoute, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then((response) => setTasks(response.data))
-            .catch((error) => console.log(error));
+            .catch((error) => console.log("Error fetching tasks:", error));
     };
 
     const reset = () => {
@@ -48,26 +58,39 @@ const TaskList = () => {
             !newTask.title ||
             !newTask.description ||
             !newTask.dueDate ||
-            !newTask.priority || 
+            !newTask.priority ||
             !newTask.status
         ) {
             alert("Please fill in all fields");
             return;
         }
 
+        const token = localStorage.getItem("token");
+        console.log(
+            "Adding task with token:",
+            token,
+            "and task data:",
+            newTask
+        );
+
         axios
-            .post(myRoute, newTask)
+            .post(myRoute, newTask, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then(() => {
                 fetchTasks();
                 reset();
             })
-            .catch((error) => console.log(error));
+            .catch((error) => console.log("Error adding task:", error));
     };
 
     const updateTask = (id, updatedTask) => {
         console.log(`Updating task with id: ${id}`, updatedTask); // Log the data
+        const token = localStorage.getItem("token");
         axios
-            .put(`${myRoute}/${id}`, updatedTask)
+            .put(`${myRoute}/${id}`, updatedTask, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then(() => {
                 fetchTasks();
                 reset();
@@ -76,27 +99,41 @@ const TaskList = () => {
     };
 
     const updateStatus = (id, status) => {
+        const token = localStorage.getItem("token");
+        console.log(`Updating status for task with id: ${id} to ${status}`);
         axios
-            .put(`${myRoute}/${id}`, { status })
+            .put(
+                `${myRoute}/${id}`,
+                { status },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
             .then(() => fetchTasks())
-            .catch((error) => console.log(error));
+            .catch((error) => console.log("Error updating status:", error));
     };
 
     const handleUpdateClick = (task) => {
+        console.log("Handling update click for task:", task);
         setNewTask(task);
         setIsUpdateModalVisible(true);
     };
 
     const handleAddClick = () => {
+        console.log("Handling add click");
         reset();
         setIsAddModalVisible(true);
     };
 
     const deleteTask = (id) => {
+        const token = localStorage.getItem("token");
+        console.log(`Deleting task with id: ${id}`);
         axios
-            .delete(`${myRoute}/${id}`)
+            .delete(`${myRoute}/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then(() => fetchTasks())
-            .catch((error) => console.log(error));
+            .catch((error) => console.log("Error deleting task:", error));
     };
 
     return (
@@ -108,10 +145,7 @@ const TaskList = () => {
                 }}
             >
                 <h1 style={{ marginRight: "30px" }}>All Tasks</h1>
-                <Button
-                    type="primary"
-                    onClick={handleAddClick}
-                >
+                <Button type="primary" onClick={handleAddClick}>
                     Add
                 </Button>
             </div>

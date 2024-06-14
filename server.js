@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const taskRouter = require('./routes/tasks');
+const authRouter = require('./routes/auth');
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +12,8 @@ const PORT = 5001;
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/tasks', taskRouter);
+app.use('/api/auth', authRouter);
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

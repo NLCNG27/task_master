@@ -1,75 +1,84 @@
-import React from "react";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Layout, Menu } from "antd";
 import TaskList from "./components/TaskList";
-import Task from "./components/AddTaskForm";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthProvider, { AuthContext } from "./context/AuthContext";
 
 const { Header, Content, Footer } = Layout;
 
 const App = () => {
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
     return (
-        <Layout>
-            <Header
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
-                <div className="demo-logo" />
-
-                <h1 style={{ color: "#FFF", marginRight: "50px" }}>
-                    TaskMaster
-                </h1>
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={["1"]}
-                    style={{
-                        flex: 1,
-                        minWidth: 0,
-                    }}
-                >
-                    <Menu.Item key="1">Home</Menu.Item>
-                    <Menu.Item key="2">About</Menu.Item>
-                    <Menu.Item key="3">Contact</Menu.Item>
-                </Menu>
-            </Header>
-            <Content
-                style={{
-                    padding: "0 48px",
-                }}
-            >
-                <Breadcrumb
-                    style={{
-                        margin: "16px 0",
-                    }}
-                >
-                    {/* <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item>List</Breadcrumb.Item>
-                    <Breadcrumb.Item>App</Breadcrumb.Item> */}
-                </Breadcrumb>
-                <div
-                    style={{
-                        background: colorBgContainer,
-                        minHeight: 280,
-                        padding: 24,
-                        borderRadius: borderRadiusLG,
-                    }}
-                >
-                    <TaskList />
-                </div>
-            </Content>
-            <Footer
-                style={{
-                    textAlign: "center",
-                }}
-            >
-                ©{new Date().getFullYear()} Developed by <a href="https://www.cngsoftware.com">CNG Software</a>. All
-                rights reserved.
-            </Footer>
-        </Layout>
+        <AuthProvider>
+            <Router>
+                <Layout>
+                    <HeaderWithUser />
+                    <Content style={{ padding: "0 50px" }}>
+                        <div
+                            style={{
+                                background: "#fff",
+                                padding: 24,
+                                minHeight: 280,
+                            }}
+                        >
+                            <Routes>
+                                <Route path="/login" element={<Login />} />
+                                <Route
+                                    path="/register"
+                                    element={<Register />}
+                                />
+                                <Route
+                                    path="/"
+                                    element={
+                                        <ProtectedRoute component={TaskList} />
+                                    }
+                                />
+                            </Routes>
+                        </div>
+                    </Content>
+                    <Footer style={{ textAlign: "center" }}>
+                        ©{new Date().getFullYear()} Developed by{" "}
+                        <a href="https://www.cngsoftware.com">CNG Software</a>.
+                        All rights reserved.
+                    </Footer>
+                </Layout>
+            </Router>
+        </AuthProvider>
     );
 };
+
+const HeaderWithUser = () => {
+    const { user, logout } = useContext(AuthContext);
+
+    return (
+        <Header
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+            }}
+        >
+            <div style={{ color: "#FFF", fontSize: "20px" }}>TaskMaster</div>
+            <Menu theme="dark" mode="horizontal">
+                {user ? (
+                    <Menu.Item key="logout" onClick={logout}>
+                        Logout
+                    </Menu.Item>
+                ) : (
+                    <>
+                        <Menu.Item key="login">
+                            <a href="/login">Login</a>
+                        </Menu.Item>
+                        <Menu.Item key="register">
+                            <a href="/register">Register</a>
+                        </Menu.Item>
+                    </>
+                )}
+            </Menu>
+        </Header>
+    );
+};
+
 export default App;
