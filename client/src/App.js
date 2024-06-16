@@ -20,7 +20,7 @@ const App = () => {
                             style={{
                                 background: "#fff",
                                 padding: 24,
-                                minHeight: 280,
+                                minHeight: "100vh",
                             }}
                         >
                             <Routes>
