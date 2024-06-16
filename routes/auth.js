@@ -68,21 +68,23 @@ router.post("/login", async(req, res) => {
             expiresIn: "1h",
         });
 
+        console.log('logging in user:', user);
+
         res.status(200).json({ token });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-// Get current user
-router.get("/me", authMiddleware, (req, res) => {
-    res.json(req.user);
-});
-
-
 // Logout a user
 router.post("/logout", (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
+});
+
+// Get current user
+router.get("/me", authMiddleware, (req, res) => {
+    console.log('Requested user:', req.user);
+    res.json(req.user);
 });
 
 

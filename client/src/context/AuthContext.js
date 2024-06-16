@@ -1,11 +1,19 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+    const storedUser = localStorage.getItem("user");
+    const [user, setUser] = useState(
+        storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null
+    );
+
     const [loading, setLoading] = useState(true);
+
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -15,10 +23,14 @@ const AuthProvider = ({ children }) => {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 .then((response) => {
+                    console.log("Fetched user on initial load:", response.data);
                     setUser(response.data);
+                    localStorage.setItem("user", JSON.stringify(response.data));
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.error("Error fetching user:", error);
                     localStorage.removeItem("token");
+                    localStorage.removeItem("user");
                 })
                 .finally(() => {
                     setLoading(false);
@@ -26,7 +38,7 @@ const AuthProvider = ({ children }) => {
         } else {
             setLoading(false);
         }
-    }, []);
+    }, [token]);
 
     const login = async (email, password) => {
         try {
@@ -36,20 +48,35 @@ const AuthProvider = ({ children }) => {
             });
             console.log("Setting token and user:", response.data);
             localStorage.setItem("token", response.data.token);
-            setUser(response.data.user);
+            setUser((prevUser) => response.data.user);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+
+            // navigate("/");
+
+            return Promise.resolve();
         } catch (error) {
-            console.log("Login failed:", error);
+            console.error("Login failed:", error);
+            return Promise.reject(error);
         }
     };
+    
+    // ensure the user is set before navigating, use the useEffect hook to watch for changes to the user state
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
+    
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
     };
 
     const register = async (username, email, password) => {
         try {
-            console.log("Registering user:", { username, email, password });
             const response = await axios.post("/api/auth/register", {
                 username,
                 email,
@@ -57,12 +84,14 @@ const AuthProvider = ({ children }) => {
             });
             console.log("Registration successful:", response.data);
         } catch (error) {
-            console.log("Registration failed:", error);
+            console.error("Registration failed:", error);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, register }}>
+        <AuthContext.Provider
+            value={{ user, loading, login, logout, register }}
+        >
             {children}
         </AuthContext.Provider>
     );

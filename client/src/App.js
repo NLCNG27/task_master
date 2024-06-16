@@ -11,8 +11,8 @@ const { Header, Content, Footer } = Layout;
 
 const App = () => {
     return (
-        <AuthProvider>
-            <Router>
+        <Router>
+            <AuthProvider>
                 <Layout>
                     <HeaderWithUser />
                     <Content style={{ padding: "0 50px" }}>
@@ -32,7 +32,7 @@ const App = () => {
                                 <Route
                                     path="/"
                                     element={
-                                        <ProtectedRoute component={TaskList} />
+                                        <ProtectedRoute element={TaskList} />
                                     }
                                 />
                             </Routes>
@@ -44,8 +44,8 @@ const App = () => {
                         All rights reserved.
                     </Footer>
                 </Layout>
-            </Router>
-        </AuthProvider>
+            </AuthProvider>
+        </Router>
     );
 };
 

@@ -12,10 +12,11 @@ const Login = () => {
     const handleSubmit = async () => {
         try {
             await login(email, password);
-            console.log("Login successful"); // Debug line
+            console.log("Login successful");
             navigate("/");
+            console.log("Navigated to /");
         } catch (error) {
-            console.error("Login error:", error); // Debug line
+            console.error("Login error:", error);
         }
     };
 
