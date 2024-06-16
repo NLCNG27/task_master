@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, Card } from "antd";
+import { Form, Input, Button, Card, message } from "antd";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -12,11 +12,11 @@ const Login = () => {
     const handleSubmit = async () => {
         try {
             await login(email, password);
-            console.log("Login successful");
+            message.success("Login successful!");
             navigate("/");
-            console.log("Navigated to /");
         } catch (error) {
             console.error("Login error:", error);
+            message.error("Login failed. Please try again.");
         }
     };
 

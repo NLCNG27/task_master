@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Button, Card } from "antd";
+import { Form, Input, Button, Card, message } from "antd";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -11,8 +11,14 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
-        await register(username, email, password);
-        navigate("/login");
+        try {
+            await register(username, email, password);
+            message.success("Registration successful!");
+            navigate("/login");
+        } catch (error) {
+            console.error("Registration error:", error);
+            message.error("Registration failed. Please try again.");
+        }
     };
 
     return (
