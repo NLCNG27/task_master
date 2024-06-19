@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Form, Input, Button, Card, message } from "antd";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
 const Profile = () => {

@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import TaskList from "./components/TaskList";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
+import CalendarWithTasks from "./components/CalendarWithTasks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider, { AuthContext } from "./context/AuthContext";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, CalendarOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
 
@@ -37,12 +38,22 @@ const App = () => {
                                         <ProtectedRoute element={Profile} />
                                     }
                                 />
+                                
+                                <Route
+                                    path="/calendar"
+                                    element={
+                                        <ProtectedRoute
+                                            element={CalendarWithTasks}
+                                        />
+                                    }
+                                />
                                 <Route
                                     path="/"
                                     element={
                                         <ProtectedRoute element={TaskList} />
                                     }
                                 />
+                                <Route path="*" element={<Navigate to="/" />} />
                             </Routes>
                         </div>
                     </Content>
@@ -66,6 +77,16 @@ const HeaderWithUser = () => {
             <Menu theme="dark" mode="horizontal" style={menuStyle}>
                 {user ? (
                     <>
+                        <Menu.Item key="tasks">
+                            <Link to="/">
+                                <UnorderedListOutlined />
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="calendar">
+                            <Link to="/calendar">
+                                <CalendarOutlined />
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="profile">
                             <Link to="/profile">
                                 <UserOutlined />

@@ -59,15 +59,13 @@ const AuthProvider = ({ children }) => {
             return Promise.reject(error);
         }
     };
-    
+
     // ensure the user is set before navigating, use the useEffect hook to watch for changes to the user state
     useEffect(() => {
         if (user) {
             navigate("/");
         }
     }, [user]);
-
-    
 
     const logout = () => {
         localStorage.removeItem("token");
@@ -91,17 +89,20 @@ const AuthProvider = ({ children }) => {
     const updateProfile = async (updatedProfile) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.put("/api/auth/profile", updatedProfile, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await axios.put(
+                "/api/auth/profile",
+                updatedProfile,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             setUser(response.data);
             localStorage.setItem("user", JSON.stringify(response.data));
             console.log("Profile updated successfully:", response.data);
-
         } catch (error) {
             console.error("Profile update failed:", error);
         }
-    }
+    };
 
     return (
         <AuthContext.Provider
