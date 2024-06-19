@@ -8,7 +8,7 @@ const TaskSchema = new mongoose.Schema({
     status: { type: String, enum: ['Pending', 'In Progress', 'Completed', 'Withdrawn'], default: 'Pending' },
     completed: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
-    // user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 
 });
 
