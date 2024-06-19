@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
         if (user) {
             navigate("/");
         }
-    }, [user, navigate]);
+    }, [user]);
 
     
 
@@ -88,9 +88,24 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    const updateProfile = async (updatedProfile) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.put("/api/auth/profile", updatedProfile, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUser(response.data);
+            localStorage.setItem("user", JSON.stringify(response.data));
+            console.log("Profile updated successfully:", response.data);
+
+        } catch (error) {
+            console.error("Profile update failed:", error);
+        }
+    }
+
     return (
         <AuthContext.Provider
-            value={{ user, loading, login, logout, register }}
+            value={{ user, loading, login, logout, register, updateProfile }}
         >
             {children}
         </AuthContext.Provider>

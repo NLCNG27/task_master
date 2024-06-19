@@ -62,6 +62,21 @@ router.post("/login", async(req, res) => {
     }
 });
 
+// Update user profile
+router.put("/profile", authMiddleware, async (req, res) => {
+    const { username, email } = req.body;
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { username, email },
+            { new: true }
+        );
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 // Logout a user
 router.post("/logout", (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });

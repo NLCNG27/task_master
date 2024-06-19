@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import TaskList from "./components/TaskList";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider, { AuthContext } from "./context/AuthContext";
+import { UserOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,8 +27,22 @@ const App = () => {
                         >
                             <Routes>
                                 <Route path="/login" element={<Login />} />
-                                <Route path="/register" element={<Register />} />
-                                <Route path="/" element={<ProtectedRoute element={TaskList} />} />
+                                <Route
+                                    path="/register"
+                                    element={<Register />}
+                                />
+                                <Route
+                                    path="/profile"
+                                    element={
+                                        <ProtectedRoute element={Profile} />
+                                    }
+                                />
+                                <Route
+                                    path="/"
+                                    element={
+                                        <ProtectedRoute element={TaskList} />
+                                    }
+                                />
                             </Routes>
                         </div>
                     </Content>
@@ -49,16 +65,23 @@ const HeaderWithUser = () => {
             <div style={titleStyle}>TaskMaster</div>
             <Menu theme="dark" mode="horizontal" style={menuStyle}>
                 {user ? (
-                    <Menu.Item key="logout" onClick={logout}>
-                        Logout
-                    </Menu.Item>
+                    <>
+                        <Menu.Item key="profile">
+                            <Link to="/profile">
+                                <UserOutlined />
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="logout" onClick={logout}>
+                            Logout
+                        </Menu.Item>
+                    </>
                 ) : (
                     <>
                         <Menu.Item key="login">
-                            <a href="/login">Login</a>
+                            <Link to="/login">Login</Link>
                         </Menu.Item>
                         <Menu.Item key="register">
-                            <a href="/register">Register</a>
+                            <Link to="/register">Register</Link>
                         </Menu.Item>
                     </>
                 )}
