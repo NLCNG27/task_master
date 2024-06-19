@@ -26,7 +26,7 @@ const Login = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100vh",
+                height: "70vh",
             }}
         >
             <Card title="Login" style={{ maxWidth: 400, margin: "auto" }}>
