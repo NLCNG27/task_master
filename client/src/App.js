@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import TaskList from "./components/TaskList";
@@ -9,6 +9,11 @@ import CalendarWithTasks from "./components/CalendarWithTasks";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthProvider, { AuthContext } from "./context/AuthContext";
 import { UserOutlined, CalendarOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { Badge } from "antd";
+import moment from "moment";
+
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -70,6 +75,31 @@ const App = () => {
 
 const HeaderWithUser = () => {
     const { user, logout } = useContext(AuthContext);
+    const [upcomingTasksCount, setUpcomingTasksCount] = useState(0);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await axios.get("/api/tasks", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const upcomingTasks = response.data.filter(
+                    (task) => moment(task.dueDate).isAfter(moment())
+                );
+
+                setUpcomingTasksCount(upcomingTasks.length);
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        if (user) {
+            fetchTasks();
+        }
+    }, [user])
 
     return (
         <Header style={headerStyle}>
@@ -83,8 +113,10 @@ const HeaderWithUser = () => {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="calendar">
-                            <Link to="/calendar">
-                                <CalendarOutlined />
+                            <Link to="/calendar" onClick={(() => setUpcomingTasksCount(0))}>
+                                <Badge count={upcomingTasksCount}>
+                                    <CalendarOutlined style={{ color: "#7A8590"}}/>
+                                </Badge>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="profile">
