@@ -25,16 +25,8 @@ const App = () => {
                         >
                             <Routes>
                                 <Route path="/login" element={<Login />} />
-                                <Route
-                                    path="/register"
-                                    element={<Register />}
-                                />
-                                <Route
-                                    path="/"
-                                    element={
-                                        <ProtectedRoute element={TaskList} />
-                                    }
-                                />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/" element={<ProtectedRoute element={TaskList} />} />
                             </Routes>
                         </div>
                     </Content>
@@ -53,15 +45,9 @@ const HeaderWithUser = () => {
     const { user, logout } = useContext(AuthContext);
 
     return (
-        <Header
-            style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-            }}
-        >
-            <div style={{ color: "#FFF", fontSize: "20px" }}>TaskMaster</div>
-            <Menu theme="dark" mode="horizontal">
+        <Header style={headerStyle}>
+            <div style={titleStyle}>TaskMaster</div>
+            <Menu theme="dark" mode="horizontal" style={menuStyle}>
                 {user ? (
                     <Menu.Item key="logout" onClick={logout}>
                         Logout
@@ -79,6 +65,25 @@ const HeaderWithUser = () => {
             </Menu>
         </Header>
     );
+};
+
+const headerStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 20px",
+};
+
+const titleStyle = {
+    color: "#FFF",
+    fontSize: "20px",
+    flexShrink: 0,
+};
+
+const menuStyle = {
+    display: "flex",
+    justifyContent: "flex-end",
+    flex: 1,
 };
 
 export default App;
