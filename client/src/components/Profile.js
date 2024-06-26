@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Card, message } from "antd";
 import { AuthContext } from "../context/AuthContext";
 
@@ -6,6 +7,7 @@ const Profile = () => {
     const { user, updateProfile } = useContext(AuthContext);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -60,6 +62,15 @@ const Profile = () => {
                 </Form.Item>
                 <Form.Item>
                     <Button
+                        type="default"
+                        onClick={() => navigate("/")}
+                        block
+                        style={{ marginRight: 8 }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        style={{ marginTop: "15px" }}
                         type="primary"
                         htmlType="submit"
                         loading={loading}
