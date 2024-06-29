@@ -5,7 +5,7 @@ const authMiddleware = require("../middleware/auth");
 
 // Create a new task
 router.post("/", authMiddleware, async (req, res) => {
-    const { title, description, dueDate, priority, status } = req.body;
+    const { title, description, dueDate, priority, status, category } = req.body;
     const task = new Task({
         title,
         description,
