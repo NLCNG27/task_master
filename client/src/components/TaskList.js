@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Button } from "antd";
+import { Button, Input, Select } from "antd";
 import moment from "moment";
 import TaskTable from "./TaskTable";
 import AddTaskModal from "./AddTaskModal";
 import UpdateTaskModal from "./UpdateTaskModal";
 import { AuthContext } from "../context/AuthContext";
+
+const { Option } = Select;
 
 const TaskList = () => {
     const { user } = useContext(AuthContext);
@@ -16,9 +18,12 @@ const TaskList = () => {
         dueDate: moment().toDate(),
         priority: "",
         status: "Pending",
+        category: "Work",
     });
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+    const [filterCategory, setFilterCategory] = useState("");
+    const [searchText, setSearchText] = useState("");
 
     const myRoute = "http://localhost:5001/api/tasks";
 
@@ -48,6 +53,7 @@ const TaskList = () => {
             dueDate: moment().toDate(),
             priority: "",
             status: "Pending",
+            category: "Work",
         });
         setIsAddModalVisible(false);
         setIsUpdateModalVisible(false);
@@ -59,7 +65,8 @@ const TaskList = () => {
             !newTask.description ||
             !newTask.dueDate ||
             !newTask.priority ||
-            !newTask.status
+            !newTask.status || 
+            !newTask.category
         ) {
             alert("Please fill in all fields");
             return;
@@ -92,7 +99,7 @@ const TaskList = () => {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then(() => {
-                fetchTasks();
+                fetchTasks(); // ensure the tasks are refreshed after update
                 reset();
             })
             .catch((error) => console.log(error));
@@ -136,12 +143,21 @@ const TaskList = () => {
             .catch((error) => console.log("Error deleting task:", error));
     };
 
+    const filteredTasks = tasks.filter(
+        (task) =>
+            (filterCategory === "" || task.category === filterCategory) &&
+            (searchText === "" ||
+                task.title.toLowerCase().includes(searchText.toLowerCase()))
+    );
+
     return (
         <div>
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "20px",
                 }}
             >
                 <h1 style={{ marginRight: "30px" }}>All Tasks</h1>
@@ -149,6 +165,32 @@ const TaskList = () => {
                     Add
                 </Button>
             </div>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "20px",
+                }}
+            >
+                <Select
+                    style={{ width: "200px", marginRight: "20px" }}
+                    placeholder="Filter by Category"
+                    value={filterCategory}
+                    onChange={(value) => setFilterCategory(value)}
+                >
+                    <Option value="">All</Option>
+                    <Option value="Work">Work</Option>
+                    <Option value="Personal">Personal</Option>
+                    <Option value="Urgent">Urgent</Option>
+
+                </Select>
+                <Input
+                    placeholder="Search by title"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                />
+            </div>
+
             <UpdateTaskModal
                 isUpdateModalVisible={isUpdateModalVisible}
                 setIsUpdateModalVisible={setIsUpdateModalVisible}
@@ -163,7 +205,7 @@ const TaskList = () => {
                 addTask={addTask}
             />
             <TaskTable
-                tasks={tasks}
+                tasks={filteredTasks}
                 updateTask={handleUpdateClick}
                 deleteTask={deleteTask}
                 updateStatus={updateStatus}
