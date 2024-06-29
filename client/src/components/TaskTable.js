@@ -9,7 +9,7 @@ const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
     const getNextStatus = (currentStatus) => {
         const currentIndex = statusCycle.indexOf(currentStatus);
         const nextIndex = (currentIndex + 1) % statusCycle.length;
-        return statusCycle[nextIndex];
+        return statusCycle[nextIndex];   
     };
 
     const columns = [
