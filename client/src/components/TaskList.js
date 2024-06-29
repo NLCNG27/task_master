@@ -236,7 +236,7 @@ const TaskList = () => {
                     updateStatus={updateStatus}
                 />
             ) : (
-                <KanbanBoard tasks={filteredTasks} updateTaskStatus={updateTaskStatus} updateTask={updateTask} deleteTask={deleteTask} />
+                <KanbanBoard tasks={filteredTasks} updateTaskStatus={updateTaskStatus} updateTask={handleUpdateClick} deleteTask={deleteTask} />
             )}
             
         </div>
