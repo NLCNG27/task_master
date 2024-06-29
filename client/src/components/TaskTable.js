@@ -58,7 +58,6 @@ const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
                 );
             },
         },
-
         {
             title: "Status",
             dataIndex: "status",
@@ -90,6 +89,34 @@ const TaskTable = ({ tasks, deleteTask, updateTask, updateStatus }) => {
                     >
                         {status}
                     </Button>
+                );
+            },
+        },
+        {
+            title: "Category",
+            dataIndex: "category",
+            key: "category",
+            render: (category) => {
+                if (!category) return null;
+
+                let color;
+                switch (category) {
+                    case "Work":
+                        color = "blue";
+                        break;
+                    case "Personal":
+                        color = "green";
+                        break;
+                    case "Urgent":
+                        color = "red";
+                        break;
+                    default:
+                        color = "black";
+                }
+                return (
+                    <span style={{ color }}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </span>
                 );
             },
         },

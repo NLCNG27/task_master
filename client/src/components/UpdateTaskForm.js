@@ -71,6 +71,23 @@ const UpdateTaskForm = ({ task, setTask }) => (
                 <Option value="Withdrawn">Withdrawn</Option>
             </Select>
         </Form.Item>
+
+        <Form.Item label="Category" required>
+            <Select
+                value={task.category}
+                onChange={(value) =>
+                    setTask({
+                        ...task,
+                        category: value,
+                    })
+                }
+            >
+                <Option value="Work">Work</Option>
+                <Option value="Personal">Personal</Option>
+                <Option value="Urgent">Urgent</Option>
+            </Select>
+        </Form.Item>
+
     </Form>
 );
 

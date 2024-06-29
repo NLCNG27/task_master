@@ -7,6 +7,7 @@ const TaskSchema = new mongoose.Schema({
     priority: { type: String, required: true },
     status: { type: String, enum: ['Pending', 'In Progress', 'Completed', 'Withdrawn'], default: 'Pending' },
     completed: { type: Boolean, default: false },
+    category: { type: String, enum: ['Work', 'Personal', 'Urgent'], default: 'Work' }, // Add this line
     createdAt: { type: Date, default: Date.now },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 

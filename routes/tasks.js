@@ -12,6 +12,7 @@ router.post("/", authMiddleware, async (req, res) => {
         dueDate,
         priority,
         status,
+        category,
         user: req.user._id,
     });
 
@@ -35,12 +36,12 @@ router.get("/", authMiddleware, async (req, res) => {
 
 // Update a task
 router.put("/:id", authMiddleware, async (req, res) => {
-    const { title, description, dueDate, priority, status } = req.body;
+    const { title, description, dueDate, priority, status, category } = req.body;
 
     try {
         const updatedTask = await Task.findByIdAndUpdate(
             { _id: req.params.id, user: req.user._id },
-            { title, description, dueDate, priority, status },
+            { title, description, dueDate, priority, status, category },
             { new: true }
         );
 
