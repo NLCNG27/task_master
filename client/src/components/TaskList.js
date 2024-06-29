@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Input, Select } from "antd";
 import moment from "moment";
 import TaskTable from "./TaskTable";
+import KanbanBoard from "./KanbanBoard";
 import AddTaskModal from "./AddTaskModal";
 import UpdateTaskModal from "./UpdateTaskModal";
 import { AuthContext } from "../context/AuthContext";
@@ -24,6 +25,7 @@ const TaskList = () => {
     const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
     const [filterCategory, setFilterCategory] = useState("");
     const [searchText, setSearchText] = useState("");
+    const [viewMode, setViewMode] = useState("list");
 
     const myRoute = "http://localhost:5001/api/tasks";
 
@@ -150,6 +152,25 @@ const TaskList = () => {
                 task.title.toLowerCase().includes(searchText.toLowerCase()))
     );
 
+    const toggleViewMode = () => {
+        setViewMode(viewMode === "list" ? "kanban" : "list");
+    };
+
+    const updateTaskStatus = (id, status) => {
+        const token = localStorage.getItem("token");
+        console.log(`Updating status for task with id: ${id} to ${status}`);
+        axios
+            .put(
+                `${myRoute}/${id}`,
+                { status },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+            .then(() => fetchTasks())
+            .catch((error) => console.log("Error updating status:", error));
+    };
+
     return (
         <div>
             <div
@@ -160,9 +181,12 @@ const TaskList = () => {
                     marginBottom: "20px",
                 }}
             >
-                <h1 style={{ marginRight: "30px" }}>All Tasks</h1>
+                <h1 style={{ marginRight: "30px" }}>My Tasks</h1>
                 <Button type="primary" onClick={handleAddClick}>
                     Add
+                </Button>
+                <Button onClick={toggleViewMode}>
+                    Switch to {viewMode === "list" ? "Kanban" : "List"} View
                 </Button>
             </div>
             <div
@@ -182,7 +206,6 @@ const TaskList = () => {
                     <Option value="Work">Work</Option>
                     <Option value="Personal">Personal</Option>
                     <Option value="Urgent">Urgent</Option>
-
                 </Select>
                 <Input
                     placeholder="Search by title"
@@ -204,12 +227,18 @@ const TaskList = () => {
                 setNewTask={setNewTask}
                 addTask={addTask}
             />
-            <TaskTable
-                tasks={filteredTasks}
-                updateTask={handleUpdateClick}
-                deleteTask={deleteTask}
-                updateStatus={updateStatus}
-            />
+
+            {viewMode === "list" ? (
+                <TaskTable
+                    tasks={filteredTasks}
+                    updateTask={handleUpdateClick}
+                    deleteTask={deleteTask}
+                    updateStatus={updateStatus}
+                />
+            ) : (
+                <KanbanBoard tasks={filteredTasks} updateTaskStatus={updateTaskStatus} updateTask={updateTask} deleteTask={deleteTask} />
+            )}
+            
         </div>
     );
 };

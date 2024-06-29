@@ -1,0 +1,16 @@
+.draggable-task {
+    cursor: grab;
+}
+
+.draggable-task:active {
+    cursor: grabbing;
+}
+
+.task-column {
+    transition: background-color 0.3s, border 0.3s;
+}
+
+.task-column.active {
+    background-color: #e6f7ff;
+    border: 2px  #1890ff;
+}
