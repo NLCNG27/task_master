@@ -182,7 +182,7 @@ const TaskList = () => {
                 }}
             >
                 <h1 style={{ marginRight: "30px" }}>My Tasks</h1>
-                <Button type="primary" onClick={handleAddClick}>
+                <Button type="primary" onClick={handleAddClick} style={{ marginLeft: "850px" }}>
                     Add
                 </Button>
                 <Button onClick={toggleViewMode}>
