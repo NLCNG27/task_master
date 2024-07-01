@@ -27,7 +27,7 @@ const TaskList = () => {
     const [searchText, setSearchText] = useState("");
     const [viewMode, setViewMode] = useState("list");
 
-    const myRoute = "http://localhost:5001/api/tasks";
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
     useEffect(() => {
         console.log("User context:", user);
@@ -41,7 +41,7 @@ const TaskList = () => {
         const token = localStorage.getItem("token");
         console.log("Fetching tasks with token:", token);
         axios
-            .get(myRoute, {
+            .get(`${apiUrl}/tasks`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => setTasks(response.data))
@@ -83,7 +83,7 @@ const TaskList = () => {
         );
 
         axios
-            .post(myRoute, newTask, {
+            .post(`${apiUrl}/tasks`, newTask, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then(() => {
@@ -97,7 +97,7 @@ const TaskList = () => {
         console.log(`Updating task with id: ${id}`, updatedTask); // Log the data
         const token = localStorage.getItem("token");
         axios
-            .put(`${myRoute}/${id}`, updatedTask, {
+            .put(`${apiUrl}/tasks/${id}`, updatedTask, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then(() => {
@@ -112,7 +112,7 @@ const TaskList = () => {
         console.log(`Updating status for task with id: ${id} to ${status}`);
         axios
             .put(
-                `${myRoute}/${id}`,
+                `${apiUrl}/tasks/${id}`,
                 { status },
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -138,7 +138,7 @@ const TaskList = () => {
         const token = localStorage.getItem("token");
         console.log(`Deleting task with id: ${id}`);
         axios
-            .delete(`${myRoute}/${id}`, {
+            .delete(`${apiUrl}/tasks/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then(() => fetchTasks())
@@ -161,7 +161,7 @@ const TaskList = () => {
         console.log(`Updating status for task with id: ${id} to ${status}`);
         axios
             .put(
-                `${myRoute}/${id}`,
+                `${apiUrl}/tasks/${id}`,
                 { status },
                 {
                     headers: { Authorization: `Bearer ${token}` },

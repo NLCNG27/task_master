@@ -70,23 +70,6 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-    // console.log(`Attempting to delete task with id ${req.params.id}`);
-    // Task.findByIdAndDelete(req.params.id)
-    //     .then((task) => {
-    //         if (task) {
-    //             console.log(`Deleted task with id ${req.params.id}`);
-    //             res.json({ message: "Task deleted successfully" });
-    //         } else {
-    //             console.log(`No task found with id ${req.params.id}`);
-    //             res.status(404).json({ message: "No task found with that ID" });
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         console.log(
-    //             `Error deleting task with id ${req.params.id}: ${error}`
-    //         );
-    //         res.status(400).json("Error: ", error);
-    //     });
 });
 
 module.exports = router;
