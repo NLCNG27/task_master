@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const taskRouter = require("./routes/tasks");
 const authRouter = require("./routes/auth");
 require("dotenv").config();
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
